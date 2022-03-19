@@ -11,6 +11,9 @@ public class MoodJournal {
     static final int MOOD_INDEX = 1;
     static final int JOURNAL_INDEX = 2;
 
+    /**
+     * Prints out the interface of options for the user
+     */
     public static void printMenu(){
         System.out.println("""
                 =================================================================================================================================================================================
@@ -36,6 +39,11 @@ public class MoodJournal {
                 """);
     }
 
+    /**
+     * Gets input from user and uses it to create a new mood journal entry
+     * @param moodEntries ArrayList of all JournalEntry's made
+     * @param emotionMasterlist ArrayList of all emotions logged
+     */
     public static void newEntry( ArrayList<JournalEntry> moodEntries, ArrayList<String> emotionMasterlist){
         Scanner entry = new Scanner(System.in);
 
@@ -71,6 +79,10 @@ public class MoodJournal {
         moodEntries.add(newEntry);
     }
 
+    /**
+     * Gets desired month from user and outputs all journal entries made in that month
+     * @param moodEntries ArrayList of all JournalEntry's madE
+     */
     public static void viewMonth(ArrayList<JournalEntry> moodEntries){
         // get desired month from user
         Scanner getDate = new Scanner(System.in);
@@ -89,6 +101,10 @@ public class MoodJournal {
         }
     }
 
+    /**
+     * Outputs every journal entry created
+     * @param moodEntries ArrayList of all JournalEntry's made
+     */
     public static void viewAll(ArrayList<JournalEntry> moodEntries){
         // Loop through all objects in moodEntries and print date and entry
         for (JournalEntry currentItem : moodEntries){
@@ -96,6 +112,10 @@ public class MoodJournal {
         }
     }
 
+    /**
+     * Gets the top three most frequent emotions logged and outputs results
+     * @param emotionMasterlist ArrayList of all emotions logged
+     */
     public static void emotionStats(ArrayList<String> emotionMasterlist){
         // Create array for top three emotions
         String[] topThree = new String[3];
@@ -187,6 +207,10 @@ public class MoodJournal {
                 "\n" + topThree[2]);
     }
 
+    /**
+     * Calculates and outputs the average mood score from all journal entries
+     * @param moodEntries ArrayList of all JournalEntry's made
+     */
     public static void avgMood(ArrayList<JournalEntry> moodEntries){
         float moodSum = 0;
 
@@ -204,6 +228,10 @@ public class MoodJournal {
         System.out.println("Your average mood rating for all time is " + avg);
     }
 
+    /**
+     * Calculates and outputs the average mood rating from a certain month given by the user
+     * @param moodEntries ArrayList of all JournalEntry's made
+     */
     public static void avgMoodMonth(ArrayList<JournalEntry> moodEntries){
         float moodSum = 0;
         int entryCount = 0;
@@ -233,6 +261,12 @@ public class MoodJournal {
 
     }
 
+    /**
+     * Loads all journal entries from a csv text file
+     * @param fileName filename given by user to retrieve data from
+     * @param moodEntries ArrayList of all JournalEntry's made
+     * @param emotionMasterlist ArrayList of all emotions ever logged
+     */
     public static void loadFile(String fileName, ArrayList<JournalEntry> moodEntries, ArrayList<String> emotionMasterlist) {
 
         try {
@@ -281,6 +315,11 @@ public class MoodJournal {
         }
     }
 
+    /**
+     * Gets a text file from the user and writes all journal entry data to it
+     * @param fileName File name given by user to write journal data to
+     * @param moodEntries ArrayList of all JournalEntry's made
+     */
     public static void saveToFile(String fileName, ArrayList<JournalEntry> moodEntries){
         try {
             FileWriter file_writer = new FileWriter(fileName);
