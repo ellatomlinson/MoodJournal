@@ -37,7 +37,7 @@ public class MoodJournal {
                 """);
     }
 
-    public static void newEntry( HashMap<String, JournalEntry> moodEntries, ArrayList<String> emotionMasterlist){
+    public static void newEntry( ArrayList<JournalEntry> moodEntries, ArrayList<String> emotionMasterlist){
         Scanner entry = new Scanner(System.in);
 
         // Get journal input from user
@@ -63,16 +63,16 @@ public class MoodJournal {
 
         // Get date
         System.out.println("Great job! Finally, enter the current month as an integer (1-12)");
-        String date = entry.nextLine();
+        int date = Integer.parseInt(entry.nextLine());
 
         // Create new journal entry using information
-        JournalEntry newEntry = new JournalEntry(moodRating, emotions, journal);
+        JournalEntry newEntry = new JournalEntry(date, moodRating, emotions, journal);
 
         // Add entry to mood journal entries hashmap with the date as the key and entry as value
-        moodEntries.put(date, newEntry);
+        moodEntries.add(newEntry);
     }
 
-    public static void viewMonth(HashMap<String, JournalEntry> moodEntries){
+    public static void viewMonth(ArrayList<JournalEntry> moodEntries){
         // get desired month from user
         Scanner getDate = new Scanner(System.in);
         System.out.println("Please enter the month you would like to view entries for (1-12): ");
@@ -80,20 +80,20 @@ public class MoodJournal {
 
         System.out.println("The journal entries you made for this month are: ");
         // Loop through all entries
-        for (String key : moodEntries.keySet()){
+        for (JournalEntry currentItem : moodEntries){
             // Check if month matches desired month
-            int currentMonth = Integer.parseInt(key);
+            int currentMonth = currentItem.getMonth();
             if (currentMonth == month){
-                // If months match, get the entry and print it
-                System.out.println("Month: " + key + "\n" + moodEntries.get(key));
+                // If months match, print entry
+                System.out.println(currentItem);
             }
         }
     }
 
-    public static void viewAll(HashMap<String, JournalEntry> moodEntries){
+    public static void viewAll(ArrayList<JournalEntry> moodEntries){
         // Loop through all objects in moodEntries and print date and entry
-        for (String key : moodEntries.keySet()){
-            System.out.println("Month: " + key + "\n" + moodEntries.get(key));
+        for (JournalEntry currentItem : moodEntries){
+            System.out.println(currentItem);
         }
     }
 
@@ -188,12 +188,11 @@ public class MoodJournal {
                 "\n" + topThree[2]);
     }
 
-    public static void avgMood(HashMap<String, JournalEntry> moodEntries){
+    public static void avgMood(ArrayList<JournalEntry> moodEntries){
         float moodSum = 0;
 
         // Loop through all moodEntries
-        for (String key : moodEntries.keySet()){
-            JournalEntry currentEntry = moodEntries.get(key);
+        for (JournalEntry currentEntry : moodEntries){
 
             // add mood from current entry to sum
             moodSum += currentEntry.getMoodRating();
@@ -206,7 +205,7 @@ public class MoodJournal {
         System.out.println("Your average mood rating for all time is " + avg);
     }
 
-    public static void avgMoodMonth(HashMap<String, JournalEntry> moodEntries){
+    public static void avgMoodMonth(ArrayList<JournalEntry> moodEntries){
         float moodSum = 0;
         int entryCount = 0;
 
@@ -216,12 +215,12 @@ public class MoodJournal {
         int month = Integer.parseInt(getDate.nextLine());
 
         // Loop through all entries
-        for (String key : moodEntries.keySet()){
+        for (JournalEntry currentEntry : moodEntries){
             // Check if month matches desired month
-            int currentMonth = Integer.parseInt(key);
+            int currentMonth = currentEntry.getMonth();
             if (currentMonth == month){
                 // If months match, add the mood rating for this entry to moodSum
-                moodSum += (moodEntries.get(key)).getMoodRating();
+                moodSum += currentEntry.getMoodRating();
                 // Increment entryCount
                 entryCount ++;
             }
@@ -235,7 +234,7 @@ public class MoodJournal {
 
     }
 
-    public static void loadFile(String fileName, HashMap<String, JournalEntry> moodEntries, ArrayList<String> emotionMasterlist) {
+    public static void loadFile(String fileName, ArrayList<JournalEntry> moodEntries, ArrayList<String> emotionMasterlist) {
 
         try {
             // Read info file
@@ -249,7 +248,7 @@ public class MoodJournal {
                 String[] lineInfo = line.split(",");
 
                 // Get info from lineInfo
-                String date = lineInfo[DATE_INDEX].strip();
+                int date = Integer.parseInt(lineInfo[DATE_INDEX].strip());
                 int moodRating = Integer.parseInt(lineInfo[MOOD_INDEX].strip());
 
                 // For remaining indices, values will be emotions, loop through this emotions
@@ -263,10 +262,10 @@ public class MoodJournal {
                 String journal = lineInfo[JOURNAL_INDEX].strip();
 
                 // create new journal entry with info
-                JournalEntry newEntry = new JournalEntry(moodRating, emotions, journal);
+                JournalEntry newEntry = new JournalEntry(date, moodRating, emotions, journal);
 
-                // Add new entry to mood Entries hashmap
-                moodEntries.put(date, newEntry);
+                // Add new entry to mood Entries list
+                moodEntries.add(newEntry);
 
                 // Read next line
                 line = buffered_reader.readLine();
@@ -283,16 +282,15 @@ public class MoodJournal {
         }
     }
 
-    public static void saveToFile(String fileName, HashMap<String, JournalEntry> moodEntries){
+    public static void saveToFile(String fileName, ArrayList<JournalEntry> moodEntries){
         try {
             FileWriter file_writer = new FileWriter(fileName);
             PrintWriter print_writer = new PrintWriter(file_writer);
 
             // Loop through all journal entries
-            for (String key : moodEntries.keySet()){
-                JournalEntry currentEntry = moodEntries.get(key);
+            for (JournalEntry currentEntry : moodEntries){
                 // Print object information formatted for load file
-                print_writer.println(key + "," + currentEntry.fileType());
+                print_writer.println(currentEntry.fileType());
             }
             print_writer.flush();
 
@@ -309,8 +307,8 @@ public class MoodJournal {
     }
 
     public static void main(String[] args) {
-        // Create hashmap for all mood journal entries
-        HashMap<String, JournalEntry> moodEntries = new HashMap<>();
+        // Create ArrayList for all mood journal entries
+        ArrayList<JournalEntry> moodEntries = new ArrayList<JournalEntry>();
 
         // Create masterlist for all emotions ever logged
         ArrayList<String> emotionMasterlist = new ArrayList<String>();
