@@ -184,7 +184,7 @@ public class MoodJournal {
         }
 
         // Print out results
-        System.out.println("The top three emotions you've recorded the most are:" + topThree[0] + "\n" + topThree[1] +
+        System.out.println("The top three emotions you've recorded the most are:\n" + topThree[0] + "\n" + topThree[1] +
                 "\n" + topThree[2]);
     }
 
