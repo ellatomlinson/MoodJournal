@@ -10,7 +10,7 @@ public class MoodJournal {
         System.out.println("""
                 =================================================================================================================================================================================
                 Hello! Welcome to your daily mood journal! Let's reflect on how you feel today, please select which option
-                you would like to use by typing the digit 1-5 in the terminal, or x to exit:
+                you would like to use by typing the digit 1-6 in the terminal, or x to exit:
                 
                 Manage entries:
                     1) Add a new journal entry
@@ -20,6 +20,7 @@ public class MoodJournal {
                 Entry statistics:
                     4) View top three most logged emotions
                     5) View average mood rating
+                    6) View average mood rating for a specific month
                     
                 x) Exit mood journal
                 =================================================================================================================================================================================
@@ -177,6 +178,24 @@ public class MoodJournal {
                 "\n" + topThree[2]);
     }
 
+    public static void avgMood(HashMap<String, JournalEntry> moodEntries){
+        float moodSum = 0;
+
+        // Loop through all moodEntries
+        for (String key : moodEntries.keySet()){
+            JournalEntry currentEntry = moodEntries.get(key);
+
+            // add mood from current entry to sum
+            moodSum += currentEntry.getMoodRating();
+        }
+
+        // divide moodSum by amount of entries for average
+        float avg = moodSum/moodEntries.size();
+
+        // Print results
+        System.out.println("Your average mood rating for all time is " + avg);
+    }
+
     public static void main(String[] args) {
         // Create hashmap for all mood journal entries
         HashMap<String, JournalEntry> moodEntries = new HashMap<>();
@@ -213,6 +232,10 @@ public class MoodJournal {
 
             }
             else if (userSelection.equals("5")){
+                // call avgMood function
+                avgMood(moodEntries);
+            }
+            else if (userSelection.equals("6")){
 
             }
 
