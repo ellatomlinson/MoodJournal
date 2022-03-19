@@ -1,8 +1,5 @@
 package ellatomlinson.moodjournal;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,8 +10,7 @@ public class MoodJournal {
     //GLOBAL CONSTANTS
     static final int DATE_INDEX = 0;
     static final int MOOD_INDEX = 1;
-    static final int EMOTIONS_INDEX = 2;
-    static final int JOURNAL_INDEX = 3;
+    static final int JOURNAL_INDEX = 2;
 
     public static void printMenu(){
         System.out.println("""
@@ -255,15 +251,15 @@ public class MoodJournal {
                 // Get info from lineInfo
                 String date = lineInfo[DATE_INDEX].strip();
                 int moodRating = Integer.parseInt(lineInfo[MOOD_INDEX].strip());
-                // Separate input into an array by commas, strip trailing whitespace
-                String[] emotionsUnstripped = lineInfo[EMOTIONS_INDEX].split(",");
-                String[] emotions = new String[emotionsUnstripped.length];
-                for (int i = 0; i < emotionsUnstripped.length; i++) {
-                    String currentItem = emotionsUnstripped[i];
-                    emotions[i] = currentItem.strip();
+
+                // For remaining indices, values will be emotions, loop through this emotions
+                String[] emotions = new String[lineInfo.length - (JOURNAL_INDEX + 1)];
+                for (int i = JOURNAL_INDEX+1; i < lineInfo.length; i++){
+                    emotions[i - (JOURNAL_INDEX + 1)] = lineInfo[i].strip();
                     // Also add emotion to the emotionMasterlist
-                    emotionMasterlist.add(currentItem.strip());
+                    emotionMasterlist.add(lineInfo[i].strip());
                 }
+
                 String journal = lineInfo[JOURNAL_INDEX].strip();
 
                 // create new journal entry with info
@@ -283,6 +279,31 @@ public class MoodJournal {
         } catch (IOException e) {
             // Handle IO exceptions
             System.err.println("IO exception occurred while trying to read load file!");
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveToFile(String fileName, HashMap<String, JournalEntry> moodEntries){
+        try {
+            FileWriter file_writer = new FileWriter(fileName);
+            PrintWriter print_writer = new PrintWriter(file_writer);
+
+            // Loop through all journal entries
+            for (String key : moodEntries.keySet()){
+                JournalEntry currentEntry = moodEntries.get(key);
+                // Print object information formatted for load file
+                print_writer.println(key + "," + currentEntry.fileType());
+            }
+            print_writer.flush();
+
+        }
+        catch (FileNotFoundException e) {
+            // Handle file not found exceptions
+            System.err.println("Could not locate info file!");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            System.err.println("IO exception occurred while trying to read save file!");
             e.printStackTrace();
         }
     }
@@ -331,7 +352,12 @@ public class MoodJournal {
                 avgMoodMonth(moodEntries);
             }
             else if (userSelection.equals("7")){
+                // Get file name from user
+                Scanner getFile = new Scanner(System.in);
+                String fileName = getFile.nextLine();
 
+                // call saveToFile method
+                saveToFile(fileName, moodEntries);
             }
             else if (userSelection.equals("8")){
                 // Get file name from user

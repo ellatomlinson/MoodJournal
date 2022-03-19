@@ -34,6 +34,20 @@ public class JournalEntry {
         return outputString;
     }
 
+    // For writing csv type files in saveToFile
+    public String fileType(){
+        // Create outputString and add mood and journal
+        String outputString = this.getMoodRating() + "," + this.getJournal() + ",";
+        // Add each emotion to output string
+        for (String item : emotions){
+            outputString += item;
+            outputString += ",";
+        }
+
+        // return output string
+        return outputString;
+    }
+
     public int getMoodRating() {return moodRating;}
     public String[] getEmotions() {return emotions;}
     public String getJournal() {return journal;}
