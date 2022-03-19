@@ -196,6 +196,35 @@ public class MoodJournal {
         System.out.println("Your average mood rating for all time is " + avg);
     }
 
+    public static void avgMoodMonth(HashMap<String, JournalEntry> moodEntries){
+        float moodSum = 0;
+        int entryCount = 0;
+
+        // get desired month from user
+        Scanner getDate = new Scanner(System.in);
+        System.out.println("Please enter the month you would like to get your average for (1-12): ");
+        int month = Integer.parseInt(getDate.nextLine());
+
+        // Loop through all entries
+        for (String key : moodEntries.keySet()){
+            // Check if month matches desired month
+            int currentMonth = Integer.parseInt(key.substring(5,7));
+            if (currentMonth == month){
+                // If months match, add the mood rating for this entry to moodSum
+                moodSum += (moodEntries.get(key)).getMoodRating();
+                // Increment entryCount
+                entryCount ++;
+            }
+        }
+
+        // Divide moodSum by total entries for avg
+        float monthAvg = moodSum/entryCount;
+
+        // Print results
+        System.out.println("Your average mood reported for this month is: " + monthAvg);
+
+    }
+
     public static void main(String[] args) {
         // Create hashmap for all mood journal entries
         HashMap<String, JournalEntry> moodEntries = new HashMap<>();
@@ -236,7 +265,8 @@ public class MoodJournal {
                 avgMood(moodEntries);
             }
             else if (userSelection.equals("6")){
-
+                // call avgMoodMonth method
+                avgMoodMonth(moodEntries);
             }
 
             // Print menu for user
