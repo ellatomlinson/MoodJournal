@@ -22,10 +22,13 @@ public class JournalEntry {
             outputString += item;
             outputString += " ";
         }
-        outputString += "\nJournal Entry: \n --------------------------------------------------------------------------------";
+        outputString += "\nJournal Entry: \n --------------------------------------------------------------------------------\n";
 
         // Add journal entry to outputString
         outputString += journal;
+
+        // Add separator for when many entries are printed
+        outputString += "=================================================================================================================================";
 
         // Return outputString
         return outputString;

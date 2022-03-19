@@ -31,7 +31,7 @@ public class MoodJournal {
         System.out.println("How would you rate your mood today on a scale from 1 to 10?");
         int moodRating = Integer.parseInt(entry.nextLine());
 
-        System.out.println("What emotions were prevalent for you today? E.g excited, nervous, angry etc. Enter emotions" +
+        System.out.println("What emotions were prevalent for you today? E.g excited, nervous, angry etc. Enter emotions " +
                 "as comma separated values.");
         String allEmotions = entry.nextLine();
         // Separate input into an array by commas, strip trailing whitespace
@@ -42,7 +42,7 @@ public class MoodJournal {
             emotions[i] = currentItem.strip();
         }
 
-        System.out.println("Write a journal entry about how your day went, you can write anything you would like, it doesn't" +
+        System.out.println("Write a journal entry about how your day went, you can write anything you would like, it doesn't " +
                 "have to be good, this journal is for you!");
         String journal = entry.nextLine();
 
@@ -55,6 +55,24 @@ public class MoodJournal {
 
         // Add entry to mood journal entries hashmap with the date as the key and entry as value
         moodEntries.put(date, newEntry);
+    }
+
+    public static void viewMonth(HashMap<String, JournalEntry> moodEntries){
+        // get desired month from user
+        Scanner getDate = new Scanner(System.in);
+        System.out.println("Please enter the month you would like to view entries for (1-12): ");
+        int month = Integer.parseInt(getDate.nextLine());
+
+        System.out.println("The journal entries you made for this month are: ");
+        // Loop through all entries
+        for (String key : moodEntries.keySet()){
+            // Check if month matches desired month
+            int currentMonth = Integer.parseInt(key.substring(5,7));
+            if (currentMonth == month){
+                // If months match, get the entry and print it
+                System.out.println("Date: " + key + "\n" + moodEntries.get(key));
+            }
+        }
     }
 
     public static void main(String[] args) {
@@ -75,6 +93,8 @@ public class MoodJournal {
                 newEntry(moodEntries);
             }
             else if (userSelection.equals("2")){
+                // call viewMonth function
+                viewMonth(moodEntries);
 
             }
             else if (userSelection.equals("3")){
