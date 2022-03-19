@@ -1,4 +1,6 @@
 package ellatomlinson.moodjournal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -24,7 +26,7 @@ public class MoodJournal {
                 """);
     }
 
-    public static void newEntry( HashMap<String, JournalEntry> moodEntries){
+    public static void newEntry( HashMap<String, JournalEntry> moodEntries, ArrayList<String> emotionMasterlist){
         Scanner entry = new Scanner(System.in);
 
         // Get journal input from user
@@ -40,6 +42,8 @@ public class MoodJournal {
         for (int i = 0; i < emotionsUnstripped.length; i++) {
             String currentItem = emotionsUnstripped[i];
             emotions[i] = currentItem.strip();
+            // Also add emotion to the emotionMasterlist
+            emotionMasterlist.add(currentItem.strip());
         }
 
         System.out.println("Write a journal entry about how your day went, you can write anything you would like, it doesn't " +
@@ -82,9 +86,103 @@ public class MoodJournal {
         }
     }
 
+    public static void emotionStats(ArrayList<String> emotionMasterlist){
+        // Create array for top three emotions
+        String[] topThree = new String[3];
+
+        // Initiate variable for top amount of occurences at 0
+        int max = 0;
+
+        // Loop through items in emotionsMasterlist
+        for (int i = 0; i < emotionMasterlist.size(); i++){
+            // Get occurrence of each item
+            int occurrences = Collections.frequency(emotionMasterlist, emotionMasterlist.get(i));
+            // If occurences is greater than max, set occurrences as max
+            if (occurrences > max){
+                max = occurrences;
+            }
+        }
+
+        // Loop through items in emotionsMasterlist again and find the emotion thats occurrences matches the max, add
+        // it to the topThree arraylist
+        for (int i = 0; i < emotionMasterlist.size(); i++){
+            // Get occurrence of each item
+            int occurrences = Collections.frequency(emotionMasterlist, emotionMasterlist.get(i));
+
+            if (occurrences == max){
+                topThree[0] = emotionMasterlist.get(i);
+            }
+        }
+
+        // Remove max item from list and repeat process
+        ArrayList<String> sublist = new ArrayList<>();
+        for (String currentItem : emotionMasterlist) {
+            if (!(currentItem.equals(topThree[0]))) {
+                sublist.add(currentItem);
+            }
+        }
+
+        // restart max counter
+        max = 0;
+
+        // Loop through items in sublist
+        for (int i = 0; i < sublist.size(); i++){
+            // Get occurrence of each item
+            int occurrences = Collections.frequency(sublist, sublist.get(i));
+            // If occurences is greater than max, set occurrences as max
+            if (occurrences > max){
+                max = occurrences;
+            }
+        }
+
+        // Loop through items in sublist again and find the emotion thats occurrences matches the max, add
+        // it to the topThree arraylist
+        for (int i = 0; i < sublist.size(); i++){
+            // Get occurrence of each item
+            int occurrences = Collections.frequency(sublist, sublist.get(i));
+
+            if (occurrences == max){
+                topThree[1] = sublist.get(i);
+            }
+        }
+
+        sublist.removeIf(currentItem -> currentItem.equals(topThree[1]));
+
+        // restart max counter
+        max = 0;
+
+        // Loop through items in sublist
+        for (int i = 0; i < sublist.size(); i++){
+            // Get occurrence of each item
+            int occurrences = Collections.frequency(sublist, sublist.get(i));
+            // If occurences is greater than max, set occurrences as max
+            if (occurrences > max){
+                max = occurrences;
+            }
+        }
+
+        // Loop through items in sublist again and find the emotion thats occurrences matches the max, add
+        // it to the topThree arraylist
+        for (int i = 0; i < sublist.size(); i++){
+            // Get occurrence of each item
+            int occurrences = Collections.frequency(sublist, sublist.get(i));
+
+            if (occurrences == max){
+                topThree[2] = sublist.get(i);
+            }
+        }
+
+        // Print out results
+        System.out.println("The top three emotions you've recorded the most are:" + topThree[0] + "\n" + topThree[1] +
+                "\n" + topThree[2]);
+    }
+
     public static void main(String[] args) {
         // Create hashmap for all mood journal entries
         HashMap<String, JournalEntry> moodEntries = new HashMap<>();
+
+        // Create masterlist for all emotions ever logged
+        ArrayList<String> emotionMasterlist = new ArrayList<String>();
 
         // Print menu for user
         printMenu();
@@ -97,7 +195,7 @@ public class MoodJournal {
 
             if (userSelection.equals("1")){
                 // call newEntry function
-                newEntry(moodEntries);
+                newEntry(moodEntries, emotionMasterlist);
             }
             else if (userSelection.equals("2")){
                 // call viewMonth function
@@ -110,6 +208,8 @@ public class MoodJournal {
 
             }
             else if (userSelection.equals("4")){
+                // call emotionStats function
+                emotionStats(emotionMasterlist);
 
             }
             else if (userSelection.equals("5")){
