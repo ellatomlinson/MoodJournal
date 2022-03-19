@@ -62,7 +62,7 @@ public class MoodJournal {
         String journal = entry.nextLine();
 
         // Get date
-        System.out.println("Great job! Finally, enter the current date in the format YYYY/MM/DD.");
+        System.out.println("Great job! Finally, enter the current month as an integer (1-12)");
         String date = entry.nextLine();
 
         // Create new journal entry using information
@@ -82,10 +82,10 @@ public class MoodJournal {
         // Loop through all entries
         for (String key : moodEntries.keySet()){
             // Check if month matches desired month
-            int currentMonth = Integer.parseInt(key.substring(5,7));
+            int currentMonth = Integer.parseInt(key);
             if (currentMonth == month){
                 // If months match, get the entry and print it
-                System.out.println("Date: " + key + "\n" + moodEntries.get(key));
+                System.out.println("Month: " + key + "\n" + moodEntries.get(key));
             }
         }
     }
@@ -93,7 +93,7 @@ public class MoodJournal {
     public static void viewAll(HashMap<String, JournalEntry> moodEntries){
         // Loop through all objects in moodEntries and print date and entry
         for (String key : moodEntries.keySet()){
-            System.out.println("Date: " + key + "\n" + moodEntries.get(key));
+            System.out.println("Month: " + key + "\n" + moodEntries.get(key));
         }
     }
 
@@ -218,7 +218,7 @@ public class MoodJournal {
         // Loop through all entries
         for (String key : moodEntries.keySet()){
             // Check if month matches desired month
-            int currentMonth = Integer.parseInt(key.substring(5,7));
+            int currentMonth = Integer.parseInt(key);
             if (currentMonth == month){
                 // If months match, add the mood rating for this entry to moodSum
                 moodSum += (moodEntries.get(key)).getMoodRating();
@@ -353,6 +353,7 @@ public class MoodJournal {
             }
             else if (userSelection.equals("7")){
                 // Get file name from user
+                System.out.println("Please enter a valid file name");
                 Scanner getFile = new Scanner(System.in);
                 String fileName = getFile.nextLine();
 
@@ -361,6 +362,7 @@ public class MoodJournal {
             }
             else if (userSelection.equals("8")){
                 // Get file name from user
+                System.out.println("Please enter a valid file name");
                 Scanner getFile = new Scanner(System.in);
                 String fileName = getFile.nextLine();
 

@@ -14,18 +14,18 @@ public class JournalEntry {
 
     public String toString(){
         // Create output string and add mood rating
-        String outputString = "Mood: %d\n" +
-                              "Emotions: ", moodRating;
+        String outputString = "Mood: " + moodRating + "\n" +
+                              "Emotions: ";
 
         // Add each emotion to output string
         for (String item : emotions){
             outputString += item;
             outputString += " ";
         }
-        outputString += "\nJournal Entry: \n --------------------------------------------------------------------------------\n";
+        outputString += "\nJournal Entry: ";
 
         // Add journal entry to outputString
-        outputString += journal;
+        outputString += journal + "\n";
 
         // Add separator for when many entries are printed
         outputString += "=================================================================================================================================";
@@ -49,6 +49,5 @@ public class JournalEntry {
     }
 
     public int getMoodRating() {return moodRating;}
-    public String[] getEmotions() {return emotions;}
     public String getJournal() {return journal;}
 }
