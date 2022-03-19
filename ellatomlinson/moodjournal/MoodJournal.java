@@ -75,6 +75,13 @@ public class MoodJournal {
         }
     }
 
+    public static void viewAll(HashMap<String, JournalEntry> moodEntries){
+        // Loop through all objects in moodEntries and print date and entry
+        for (String key : moodEntries.keySet()){
+            System.out.println("Date: " + key + "\n" + moodEntries.get(key));
+        }
+    }
+
     public static void main(String[] args) {
         // Create hashmap for all mood journal entries
         HashMap<String, JournalEntry> moodEntries = new HashMap<>();
@@ -98,6 +105,8 @@ public class MoodJournal {
 
             }
             else if (userSelection.equals("3")){
+                // call viewAll function
+                viewAll(moodEntries);
 
             }
             else if (userSelection.equals("4")){
