@@ -1,4 +1,8 @@
 package ellatomlinson.moodjournal;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -6,11 +10,17 @@ import java.util.Scanner;
 
 public class MoodJournal {
 
+    //GLOBAL CONSTANTS
+    static final int DATE_INDEX = 0;
+    static final int MOOD_INDEX = 1;
+    static final int EMOTIONS_INDEX = 2;
+    static final int JOURNAL_INDEX = 3;
+
     public static void printMenu(){
         System.out.println("""
                 =================================================================================================================================================================================
                 Hello! Welcome to your daily mood journal! Let's reflect on how you feel today, please select which option
-                you would like to use by typing the digit 1-6 in the terminal, or x to exit:
+                you would like to use by typing the digit 1-8 in the terminal, or x to exit:
                 
                 Manage entries:
                     1) Add a new journal entry
@@ -21,6 +31,10 @@ public class MoodJournal {
                     4) View top three most logged emotions
                     5) View average mood rating
                     6) View average mood rating for a specific month
+                    
+                Manage files:
+                    7) Save journal data to file
+                    8) Load journal data from file
                     
                 x) Exit mood journal
                 =================================================================================================================================================================================
@@ -225,6 +239,54 @@ public class MoodJournal {
 
     }
 
+    public static void loadFile(String fileName, HashMap<String, JournalEntry> moodEntries, ArrayList<String> emotionMasterlist) {
+
+        try {
+            // Read info file
+            FileReader file_reader = new FileReader(fileName);
+            BufferedReader buffered_reader = new BufferedReader(file_reader);
+            String line = buffered_reader.readLine();
+
+            // Read each line of file
+            while (line != null) {
+                // split line by commas
+                String[] lineInfo = line.split(",");
+
+                // Get info from lineInfo
+                String date = lineInfo[DATE_INDEX].strip();
+                int moodRating = Integer.parseInt(lineInfo[MOOD_INDEX].strip());
+                // Separate input into an array by commas, strip trailing whitespace
+                String[] emotionsUnstripped = lineInfo[EMOTIONS_INDEX].split(",");
+                String[] emotions = new String[emotionsUnstripped.length];
+                for (int i = 0; i < emotionsUnstripped.length; i++) {
+                    String currentItem = emotionsUnstripped[i];
+                    emotions[i] = currentItem.strip();
+                    // Also add emotion to the emotionMasterlist
+                    emotionMasterlist.add(currentItem.strip());
+                }
+                String journal = lineInfo[JOURNAL_INDEX].strip();
+
+                // create new journal entry with info
+                JournalEntry newEntry = new JournalEntry(moodRating, emotions, journal);
+
+                // Add new entry to mood Entries hashmap
+                moodEntries.put(date, newEntry);
+
+                // Read next line
+                line = buffered_reader.readLine();
+            }
+        }
+        catch (FileNotFoundException e) {
+            // Handle file not found exceptions
+            System.err.println("Could not locate file to load from!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            // Handle IO exceptions
+            System.err.println("IO exception occurred while trying to read load file!");
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         // Create hashmap for all mood journal entries
         HashMap<String, JournalEntry> moodEntries = new HashMap<>();
@@ -267,6 +329,17 @@ public class MoodJournal {
             else if (userSelection.equals("6")){
                 // call avgMoodMonth method
                 avgMoodMonth(moodEntries);
+            }
+            else if (userSelection.equals("7")){
+
+            }
+            else if (userSelection.equals("8")){
+                // Get file name from user
+                Scanner getFile = new Scanner(System.in);
+                String fileName = getFile.nextLine();
+
+                // call loadFile method
+                loadFile(fileName, moodEntries, emotionMasterlist);
             }
 
             // Print menu for user
